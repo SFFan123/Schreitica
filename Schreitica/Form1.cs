@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,10 +26,8 @@ namespace Schreitica
             AppEvents.USBConnectionStateChanged += UsbConnectionStateChanged;
             AppEvents.OBSConnectionStateChanged += OBSConnectionStateChanged;
 
-            init_ParsePollingDelay();
+            init_GetValues();
         }
-
-        
 
         private void init_ParsePollingDelay()
         {
@@ -36,7 +35,15 @@ namespace Schreitica
 
             double hz = 1000 / delay;
 
-            this.txt_PollingRate.Text = hz.ToString("F");
+            this.numUpDown_PollingRate.Value = (decimal)hz;
+        }
+
+        private void init_GetValues()
+        {
+            txt_OBS_Password.Text =
+                new NetworkCredential(string.Empty, CryptHelper.Decrypt(Settings.Instance.OBSPassword)).Password;
+            txt_OBS_URL.Text = Settings.Instance.OBSUrl;
+            init_ParsePollingDelay();
         }
 
         private void UsbConnectionStateChanged(object sender, ConnectionChangedEventArgs e)
@@ -51,7 +58,16 @@ namespace Schreitica
 
         private void saveSettingToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            try
+            {
+                SettingHelper.SaveSetting(Settings.Instance.ToXML());
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                MessageBox.Show(exception.Message, exception.GetType().Name, MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)

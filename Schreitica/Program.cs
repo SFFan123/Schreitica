@@ -24,12 +24,13 @@ namespace Schreitica
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            USBHandler = new USBHandler();
-            var passwd = new SecureString();
-            foreach(char c in "reLFqhqy62Pq3dOH")
-                passwd.AppendChar(c);
+            Settings settings = Settings.Instance;
+            settings.Load();
 
-            OBSConnection = new OBSConenction("ws://127.0.0.1:4455", passwd);
+            USBHandler = new USBHandler();
+            var passwd = CryptHelper.Decrypt(settings.OBSPassword);
+
+            OBSConnection = new OBSConenction(settings.OBSUrl, passwd);
 
             Application.Run(new MyCustomApplicationContext());
         }

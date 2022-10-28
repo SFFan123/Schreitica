@@ -8,11 +8,6 @@ namespace Schreitica.Actions
 {
     public interface IActionBase
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="resetDelay">-1 to disable</param>
-        void Execute(double value, int resetDelay = -1);
+        Task ExecuteAsync();
     }
 }

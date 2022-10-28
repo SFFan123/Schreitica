@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +10,7 @@ using DeviceId;
 
 namespace Schreitica
 {
-    public static class CrptHelper
+    public static class CryptHelper
     {
         public static string Encrypt(string clearText)
         {
@@ -39,7 +40,7 @@ namespace Schreitica
             }
             return clearText;
         }
-        public static string Decrypt(string cipherText)
+        public static SecureString Decrypt(string cipherText)
         {
             string EncryptionKey =new DeviceIdBuilder()
                 .AddMachineName()
@@ -51,6 +52,7 @@ namespace Schreitica
                 .ToString();
             cipherText = cipherText.Replace(" ", "+");
             byte[] cipherBytes = Convert.FromBase64String(cipherText);
+            var res = new SecureString();
             using (Aes encryptor = Aes.Create())
             {
                 Rfc2898DeriveBytes pdb = new Rfc2898DeriveBytes(EncryptionKey, new byte[] { 84,119,105,116,99,104,32,80,114,105,109,101,32,105,115,32,110,111,116,32,97,32,99,114,105,109,101,46 });
@@ -63,10 +65,40 @@ namespace Schreitica
                         cs.Write(cipherBytes, 0, cipherBytes.Length);
                         cs.Close();
                     }
-                    cipherText = Encoding.Unicode.GetString(ms.ToArray());
+                    var chars = Encoding.Unicode.GetString(ms.ToArray()).ToCharArray();
+                    foreach (char c in chars)
+                    {
+                        res.AppendChar(c);
+                    }
+                    chars = Array.Empty<char>();
                 }
             }
-            return cipherText;
+            return res;
+        }
+    }
+
+    public static class SettingHelper
+    {
+        public static void SaveSetting(string settingXML)
+        {
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Schreitica");
+
+            if (!Directory.Exists(path))
+                Directory.CreateDirectory(path);
+
+            path = Path.Combine(path, "Settings.xml");
+
+            File.WriteAllText(path, settingXML, Encoding.UTF8);
+        }
+
+        public static FileStream LoadSettings()
+        {
+            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Schreitica", "Settings.xml");
+
+            if (!File.Exists(path))
+                return null;
+
+            return File.OpenRead(path);
         }
     }
 }

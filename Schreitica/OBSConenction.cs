@@ -48,19 +48,6 @@ namespace Schreitica
         private void OnConnect(object sender, EventArgs e)
         {
             AppEvents.RaiseOBSConnectionStateChanged(this, new ConnectionChangedEventArgs(true));
-            //var scenes = obs.GetCurrentProgramScene();
-
-            //var items = obs.GetSceneItemList(scenes);
-
-            //int ItemId = items.FirstOrDefault(x => x.SourceName.Equals("ALARM", StringComparison.CurrentCultureIgnoreCase))?.ItemId ?? -1;
-
-            //if (ItemId == -1)
-            //{
-            //    //log error
-            //    return;
-            //}
-            //obs.SetSceneItemEnabled(scenes, ItemId, true);
-
         }
 
         private void OnDisconnect(object sender, ObsDisconnectionInfo obsDisconnectionInfo)
