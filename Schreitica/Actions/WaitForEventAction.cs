@@ -1,22 +1,53 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Schreitica.Actions
 {
-    internal class WaitForEventAction:IActionBase
+    internal class WaitForEventAction:IActionBase, IDisposable
     {
-        public async Task ExecuteAsync()
+        public WaitForEventAction(EventHandler handel)
         {
-            TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>();
+            this.eventToListen = handel;
+        }
 
-            AppEvents.BelowThresholdAgain += (sender, args) =>
-            {
-                tcs.TrySetResult(true);
-            };
+        private EventHandler eventToListen;
+        private TaskCompletionSource<bool> tcs;
+
+        public async Task<object> ExecuteAsync()
+        {
+            tcs = new TaskCompletionSource<bool>();
+
+            eventToListen += fire;
+
             await tcs.Task;
+
+            return Task.CompletedTask;
+        }
+
+        private void fire(object sender, EventArgs args)
+        {
+            tcs.TrySetResult(true);
+        }
+
+        public void Dispose()
+        {
+            eventToListen -= fire;
+            tcs.TrySetCanceled();
+            tcs = null;
+        }
+    }
+
+    internal class WaitAction : IActionBase
+    {
+        public WaitAction(int timeout)
+        {
+            timeout_s = timeout;
+        }
+        public int timeout_s { get; }
+        public async Task<object> ExecuteAsync()
+        {
+            await Task.Delay(timeout_s * 100);
+            return Task.CompletedTask;
         }
     }
 }

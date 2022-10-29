@@ -8,6 +8,6 @@ namespace Schreitica.Actions
 {
     public interface IActionBase
     {
-        Task ExecuteAsync();
+        Task<object> ExecuteAsync();
     }
 }

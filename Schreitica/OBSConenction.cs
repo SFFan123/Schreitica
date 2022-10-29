@@ -1,11 +1,13 @@
 ﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection;
 using System.Security;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using OBSWebsocketDotNet;
 using OBSWebsocketDotNet.Communication;
 using OBSWebsocketDotNet.Types;
@@ -13,12 +15,16 @@ using OBSWebsocketDotNet.Types.Events;
 
 namespace Schreitica
 {
-    internal class OBSConenction
+    public class OBSConenction
     {
         private static OBSConenction instance;
         public static OBSConenction Instance => instance;
-        protected OBSWebsocket obs;
-        public OBSConenction(string url, SecureString password)
+        public OBSWebsocket obs;
+
+        private string url;
+        private SecureString passwd;
+        private bool manualDC;
+        public OBSConenction(string url, SecureString password, bool autoConnected)
         {
             if (instance != null)
             {
@@ -29,6 +35,9 @@ namespace Schreitica
             obs.Connected += OnConnect;
             obs.Disconnected += OnDisconnect;
 
+            passwd = password;
+            this.url = url;
+
             //obs.CurrentProgramSceneChanged += onCurrentProgramSceneChanged;
             //obs.CurrentSceneCollectionChanged += onSceneCollectionChanged;
             //obs.CurrentProfileChanged += onCurrentProfileChanged;
@@ -37,22 +46,53 @@ namespace Schreitica
 
             //obs.StreamStateChanged += onStreamStateChanged;
             //obs.RecordStateChanged += onRecordStateChanged;
-
-
-            obs.ConnectAsync(url, new NetworkCredential(string.Empty, password).Password);
+            if (autoConnected)
+            {
+                Connect();
+            }
+            
+            
             instance = this;
         }
 
         public bool IsConnected => obs.IsConnected;
 
-        private void OnConnect(object sender, EventArgs e)
+
+        public void Connect()
+        {
+            Task.Run(async () =>
+            {
+                while (!IsConnected)
+                {
+                    obs.ConnectAsync(url, new NetworkCredential(string.Empty, passwd).Password);
+                    await Task.Delay(1000);
+                }
+            });
+        }
+
+        private async void OnConnect(object sender, EventArgs e)
         {
             AppEvents.RaiseOBSConnectionStateChanged(this, new ConnectionChangedEventArgs(true));
+
+            //string test = "CurrentScene.ShowSource(ALARM)";
+
+            
+            //string cssharpScript = CommandParser.ParseCommand(test);
+
+            //await CSharpScript.EvaluateAsync(cssharpScript,
+            //    ScriptOptions.Default
+            //        .AddReferences(typeof(Enumerable).GetTypeInfo().Assembly)
+            //        .AddImports("System", "System.Linq"),
+            //    globals: this);
+
         }
+
 
         private void OnDisconnect(object sender, ObsDisconnectionInfo obsDisconnectionInfo)
         {
             AppEvents.RaiseOBSConnectionStateChanged(this, new ConnectionChangedEventArgs(false));
+            if(!manualDC)
+                Connect();
         }
     }
 }

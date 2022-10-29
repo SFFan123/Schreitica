@@ -5,6 +5,7 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Schreitica.Actions;
 using Schreitica.Properties;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -30,9 +31,56 @@ namespace Schreitica
             USBHandler = new USBHandler();
             var passwd = CryptHelper.Decrypt(settings.OBSPassword);
 
-            OBSConnection = new OBSConenction(settings.OBSUrl, passwd);
+            OBSConnection = new OBSConenction(settings.OBSUrl, passwd, settings.AutoConnectRun);
+
+            var actions = ParseActions();
+
+
+            AppEvents.ThresholdExceeded += async (sender, args) =>
+            {
+                foreach (IActionBase action in actions)
+                {
+                    await action.ExecuteAsync();
+                }
+
+            };
+
 
             Application.Run(new MyCustomApplicationContext());
+        }
+
+
+        public static List<IActionBase> ParseActions()
+        {
+            string[] test = ("OBS.CurrentScene.ShowSource(ALARM)\n" +
+                          "App.WaitFor(UnderThreshold)").Split('\n');
+            
+            List<IActionBase> actions = new List<IActionBase>();
+
+            string actionType = string.Empty;
+            for (int i = 0; i < test.Length; i++)
+            {
+                string commandString = test[i];
+                actionType = commandString.Substring(0, commandString.IndexOf("."));
+                commandString = commandString.Substring(commandString.IndexOf(".")+1);
+
+                switch (actionType)
+                {
+                    case "App":
+                    {
+                        // nop
+                        break;
+                    }
+                    case "OBS":
+                    {
+                        actions.Add(new DynamicOBSAction(OBSConnection.obs, CommandParser.ParseOBSCommand(commandString)));
+                        break;
+                    }
+                }
+
+            }
+
+            return actions;
         }
 
         public class MyCustomApplicationContext : ApplicationContext

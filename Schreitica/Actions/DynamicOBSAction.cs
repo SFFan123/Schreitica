@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using OBSWebsocketDotNet;
 
 namespace Schreitica.Actions
@@ -12,13 +15,17 @@ namespace Schreitica.Actions
             this.command = command;
         }
 
-        private OBSWebsocket obs;
-        private string command;
+        public OBSWebsocket obs { get; }
+        private string command { get; }
 
         
-        public async Task ExecuteAsync()
+        public async Task<object> ExecuteAsync()
         {
-            await CSharpScript.EvaluateAsync(command, globals:obs);
+            return await CSharpScript.EvaluateAsync(command,
+                ScriptOptions.Default
+                    .AddReferences(typeof(Enumerable).GetTypeInfo().Assembly)
+                    .AddImports("System", "System.Linq"),
+                globals: this);
         }
     }
 }

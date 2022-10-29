@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace Schreitica
 {
@@ -16,7 +18,7 @@ namespace Schreitica
         public static string ShowSource(string sourceName)
         {
             return
-                $"int id = obs.GetSceneItemList(sceneName).FirstOrDefault(x => x.SourceName.Equals({sourceName}))?.ItemId ?? -1; " +
+                $"int id = obs.GetSceneItemList(sceneName).FirstOrDefault(x => x.SourceName.Equals(\"{sourceName}\"))?.ItemId ?? -1; " +
                 "if(id == -1) return; " + "obs.SetSceneItemEnabled(sceneName, id , true );";
         }
 
@@ -24,8 +26,14 @@ namespace Schreitica
         public static string HideSource(string sourceName)
         {
             return
-                $"int id = obs.GetSceneItemList(sceneName).FirstOrDefault(x => x.SourceName.Equals({sourceName}))?.ItemId ?? -1; " +
+                $"int id = obs.GetSceneItemList(sceneName).FirstOrDefault(x => x.SourceName.Equals(\"{sourceName}\"))?.ItemId ?? -1; " +
                 "if(id == -1) return; " + "obs.SetSceneItemEnabled(sceneName, id , false );";
+        }
+
+
+        public static async void Wait(TimeSpan timeSpan)
+        {
+            await Task.Delay(timeSpan);
         }
             
     }
@@ -35,7 +43,7 @@ namespace Schreitica
         private static Regex MethodRegex = new Regex(@"^(?<method>\w+)\((?<parameter>\w+)\)");
         private static Regex PropertyRegex = new Regex(@"^\w+(?=\.)");
 
-        public static string ParseCommand(string command)
+        public static string ParseOBSCommand(string command)
         {
             if (string.IsNullOrEmpty(command))
                 return string.Empty;

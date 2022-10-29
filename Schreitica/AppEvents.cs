@@ -27,7 +27,7 @@ namespace Schreitica
 
         public static void RaiseOBSConnectionStateChanged(object sender, ConnectionChangedEventArgs e)
         {
-            EventHandler<ConnectionChangedEventArgs> handler = USBConnectionStateChanged;
+            EventHandler<ConnectionChangedEventArgs> handler = OBSConnectionStateChanged;
             handler?.Invoke(sender,e);
         }
 

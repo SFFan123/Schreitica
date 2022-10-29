@@ -197,10 +197,6 @@
             // listBox1
             // 
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "OBS.CurrentScene.ShowSource(\"ALARM\")",
-            "WaitFor(UnderThreshold)",
-            "OBS.CurrentScene.HideSource(\"ALARM\")"});
             this.listBox1.Location = new System.Drawing.Point(6, 19);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(370, 329);
