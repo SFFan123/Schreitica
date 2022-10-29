@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Schreitica.Actions;
@@ -45,7 +46,6 @@ namespace Schreitica
 
             };
 
-
             Application.Run(new MyCustomApplicationContext());
         }
 
@@ -53,7 +53,7 @@ namespace Schreitica
         public static List<IActionBase> ParseActions()
         {
             string[] test = ("OBS.CurrentScene.ShowSource(ALARM)\n" +
-                          "App.WaitFor(UnderThreshold)").Split('\n');
+                          "App.WaitFor(BelowThresholdAgain)").Split('\n');
             
             List<IActionBase> actions = new List<IActionBase>();
 
@@ -68,7 +68,7 @@ namespace Schreitica
                 {
                     case "App":
                     {
-                        // nop
+                        actions.Add(CommandParser.ParseAppCommand(commandString));
                         break;
                     }
                     case "OBS":

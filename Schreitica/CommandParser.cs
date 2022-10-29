@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Schreitica.Actions;
 
 namespace Schreitica
 {
     internal static class Commands
     {
+        #region OBS
         public static string CurrentScene { get; } = @"string sceneName = obs.GetCurrentProgramScene();";
 
 
@@ -35,7 +38,9 @@ namespace Schreitica
         {
             await Task.Delay(timeSpan);
         }
-            
+        #endregion
+
+
     }
 
     internal static class CommandParser
@@ -108,6 +113,42 @@ namespace Schreitica
 
             return resultCommand;
         }
+
+        public static AppAction ParseAppCommand(string command)
+        {
+            if (string.IsNullOrEmpty(command))
+                return null;
+            command = command.Trim();
+            if (command == string.Empty)
+                return null;
+
+
+            Match methodMatch;
+            
+            methodMatch = MethodRegex.Match(command);
+            if (methodMatch.Success)
+            {
+                string method = methodMatch.Groups["method"].Value;
+
+                switch (method)
+                {
+                    case "WaitFor":
+                    {
+                        string name = methodMatch.Groups["parameter"].Value;
+                        return new WaitForEventAction(name);
+
+                    }
+                        
+                        
+
+                    case "Wait":
+                        return new WaitAction(int.Parse(methodMatch.Groups["parameter"].Value));
+                }
+            }
+
+            return null;
+        }
+
 
         private static void rmMatch(ref string str, string match)
         {
