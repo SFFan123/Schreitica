@@ -6,8 +6,6 @@ using System.Security;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.CSharp.Scripting;
-using Microsoft.CodeAnalysis.Scripting;
 using OBSWebsocketDotNet;
 using OBSWebsocketDotNet.Communication;
 using OBSWebsocketDotNet.Types;
@@ -23,7 +21,7 @@ namespace Schreitica
 
         private string url;
         private SecureString passwd;
-        private bool manualDC;
+        private bool shouldReconnect = false;
         public OBSConenction(string url, SecureString password, bool autoConnected)
         {
             if (instance != null)
@@ -55,7 +53,7 @@ namespace Schreitica
             instance = this;
         }
 
-        public bool IsConnected => obs.IsConnected;
+        public bool IsConnected => obs?.IsConnected ?? false;
 
 
         public void Connect()
@@ -74,9 +72,11 @@ namespace Schreitica
         {
             AppEvents.RaiseOBSConnectionStateChanged(this, new ConnectionChangedEventArgs(true));
 
+            shouldReconnect = true;
+
             //string test = "CurrentScene.ShowSource(ALARM)";
 
-            
+
             //string cssharpScript = CommandParser.ParseCommand(test);
 
             //await CSharpScript.EvaluateAsync(cssharpScript,
@@ -91,7 +91,7 @@ namespace Schreitica
         private void OnDisconnect(object sender, ObsDisconnectionInfo obsDisconnectionInfo)
         {
             AppEvents.RaiseOBSConnectionStateChanged(this, new ConnectionChangedEventArgs(false));
-            if(!manualDC)
+            if(shouldReconnect)
                 Connect();
         }
     }

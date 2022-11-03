@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Security;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -17,6 +20,7 @@ namespace Schreitica
         internal static Form Window;
         public static USBHandler USBHandler;
         public static OBSConenction OBSConnection;
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -28,60 +32,64 @@ namespace Schreitica
 
             Settings settings = Settings.Instance;
             settings.Load();
+            
 
             USBHandler = new USBHandler();
             var passwd = CryptHelper.Decrypt(settings.OBSPassword);
 
             OBSConnection = new OBSConenction(settings.OBSUrl, passwd, settings.AutoConnectRun);
 
-            var actions = ParseActions();
+            
+
+            //var actions = ParseActions();
 
 
-            AppEvents.ThresholdExceeded += async (sender, args) =>
-            {
-                foreach (IActionBase action in actions)
-                {
-                    await action.ExecuteAsync();
-                }
+            //AppEvents.ThresholdExceeded += async (sender, args) =>
+            //{
+            //    foreach (IActionBase action in actions)
+            //    {
+            //        await action.ExecuteAsync();
+            //    }
 
-            };
+            //};
 
             Application.Run(new MyCustomApplicationContext());
         }
 
 
-        public static List<IActionBase> ParseActions()
-        {
-            string[] test = ("OBS.CurrentScene.ShowSource(ALARM)\n" +
-                          "App.WaitFor(BelowThresholdAgain)").Split('\n');
+
+        //public static List<IActionBase> ParseActions()
+        //{
+        //    string[] test = ("OBS.CurrentScene.ShowSource(ALARM)\n" +
+        //                  "App.WaitFor(BelowThresholdAgain)").Split('\n');
             
-            List<IActionBase> actions = new List<IActionBase>();
+        //    List<IActionBase> actions = new List<IActionBase>();
 
-            string actionType = string.Empty;
-            for (int i = 0; i < test.Length; i++)
-            {
-                string commandString = test[i];
-                actionType = commandString.Substring(0, commandString.IndexOf("."));
-                commandString = commandString.Substring(commandString.IndexOf(".")+1);
+        //    string actionType = string.Empty;
+        //    for (int i = 0; i < test.Length; i++)
+        //    {
+        //        string commandString = test[i];
+        //        actionType = commandString.Substring(0, commandString.IndexOf("."));
+        //        commandString = commandString.Substring(commandString.IndexOf(".")+1);
 
-                switch (actionType)
-                {
-                    case "App":
-                    {
-                        actions.Add(CommandParser.ParseAppCommand(commandString));
-                        break;
-                    }
-                    case "OBS":
-                    {
-                        actions.Add(new DynamicOBSAction(OBSConnection.obs, CommandParser.ParseOBSCommand(commandString)));
-                        break;
-                    }
-                }
+        //        switch (actionType)
+        //        {
+        //            case "App":
+        //            {
+        //                actions.Add(CommandParser.ParseAppCommand(commandString));
+        //                break;
+        //            }
+        //            case "OBS":
+        //            {
+        //                actions.Add(new DynamicOBSAction(OBSConnection.obs, CommandParser.ParseOBSCommand(commandString)));
+        //                break;
+        //            }
+        //        }
 
-            }
+        //    }
 
-            return actions;
-        }
+        //    return actions;
+        //}
 
         public class MyCustomApplicationContext : ApplicationContext
         {
