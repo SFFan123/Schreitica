@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode5 = new System.Windows.Forms.TreeNode("ShowSource");
-            System.Windows.Forms.TreeNode treeNode6 = new System.Windows.Forms.TreeNode("WaitForEvent", 2, 2);
-            System.Windows.Forms.TreeNode treeNode7 = new System.Windows.Forms.TreeNode("HideSource", 1, 1);
-            System.Windows.Forms.TreeNode treeNode8 = new System.Windows.Forms.TreeNode("NoiseLevelReached", new System.Windows.Forms.TreeNode[] {
-            treeNode5,
-            treeNode6,
-            treeNode7});
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("ShowSource");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("WaitForEvent", 2, 2);
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("HideSource", 1, 1);
+            System.Windows.Forms.TreeNode treeNode4 = new System.Windows.Forms.TreeNode("NoiseLevelReached", new System.Windows.Forms.TreeNode[] {
+            treeNode1,
+            treeNode2,
+            treeNode3});
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Schreitica));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -51,6 +51,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.btn_ApplyPolling = new System.Windows.Forms.Button();
             this.grpboxAction = new System.Windows.Forms.GroupBox();
+            this.btn_removeAction = new System.Windows.Forms.Button();
+            this.treeViewActions = new System.Windows.Forms.TreeView();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.btn_Tree_Add = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem_Exit = new System.Windows.Forms.ToolStripMenuItem();
@@ -71,14 +74,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.numUpDown_PollingRate = new System.Windows.Forms.NumericUpDown();
-            this.treeViewActions = new System.Windows.Forms.TreeView();
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.btn_removeAction = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.grpboxAction.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_PollingRate)).BeginInit();
             this.SuspendLayout();
             // 
@@ -205,6 +207,48 @@
             this.grpboxAction.TabIndex = 10;
             this.grpboxAction.TabStop = false;
             this.grpboxAction.Text = "Aktion";
+            // 
+            // btn_removeAction
+            // 
+            this.btn_removeAction.Location = new System.Drawing.Point(87, 359);
+            this.btn_removeAction.Name = "btn_removeAction";
+            this.btn_removeAction.Size = new System.Drawing.Size(75, 23);
+            this.btn_removeAction.TabIndex = 3;
+            this.btn_removeAction.Text = "Remove";
+            this.btn_removeAction.UseVisualStyleBackColor = true;
+            // 
+            // treeViewActions
+            // 
+            this.treeViewActions.ImageIndex = 0;
+            this.treeViewActions.ImageList = this.imageList1;
+            this.treeViewActions.Location = new System.Drawing.Point(6, 19);
+            this.treeViewActions.Name = "treeViewActions";
+            treeNode1.ImageIndex = 1;
+            treeNode1.Name = "Node1";
+            treeNode1.Text = "ShowSource";
+            treeNode2.ImageIndex = 2;
+            treeNode2.Name = "Node2";
+            treeNode2.SelectedImageIndex = 2;
+            treeNode2.Text = "WaitForEvent";
+            treeNode3.ImageIndex = 1;
+            treeNode3.Name = "Node3";
+            treeNode3.SelectedImageIndex = 1;
+            treeNode3.Text = "HideSource";
+            treeNode4.Name = "NoiseLevelReached";
+            treeNode4.Text = "NoiseLevelReached";
+            this.treeViewActions.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode4});
+            this.treeViewActions.SelectedImageIndex = 0;
+            this.treeViewActions.Size = new System.Drawing.Size(370, 334);
+            this.treeViewActions.TabIndex = 2;
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "939849383397179533.png");
+            this.imageList1.Images.SetKeyName(1, "Open_Broadcaster_Software_Logo.png");
+            this.imageList1.Images.SetKeyName(2, "void.png");
             // 
             // btn_Tree_Add
             // 
@@ -369,12 +413,13 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.button1);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(383, 144);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Websocket server";
+            this.tabPage2.Text = "Hue Config";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // numUpDown_PollingRate
@@ -401,47 +446,15 @@
             0,
             0});
             // 
-            // treeViewActions
+            // button1
             // 
-            this.treeViewActions.ImageIndex = 0;
-            this.treeViewActions.ImageList = this.imageList1;
-            this.treeViewActions.Location = new System.Drawing.Point(6, 19);
-            this.treeViewActions.Name = "treeViewActions";
-            treeNode5.ImageIndex = 1;
-            treeNode5.Name = "Node1";
-            treeNode5.Text = "ShowSource";
-            treeNode6.ImageIndex = 2;
-            treeNode6.Name = "Node2";
-            treeNode6.SelectedImageIndex = 2;
-            treeNode6.Text = "WaitForEvent";
-            treeNode7.ImageIndex = 1;
-            treeNode7.Name = "Node3";
-            treeNode7.SelectedImageIndex = 1;
-            treeNode7.Text = "HideSource";
-            treeNode8.Name = "NoiseLevelReached";
-            treeNode8.Text = "NoiseLevelReached";
-            this.treeViewActions.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode8});
-            this.treeViewActions.SelectedImageIndex = 0;
-            this.treeViewActions.Size = new System.Drawing.Size(370, 334);
-            this.treeViewActions.TabIndex = 2;
-            // 
-            // imageList1
-            // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "939849383397179533.png");
-            this.imageList1.Images.SetKeyName(1, "Open_Broadcaster_Software_Logo.png");
-            this.imageList1.Images.SetKeyName(2, "void.png");
-            // 
-            // btn_removeAction
-            // 
-            this.btn_removeAction.Location = new System.Drawing.Point(87, 359);
-            this.btn_removeAction.Name = "btn_removeAction";
-            this.btn_removeAction.Size = new System.Drawing.Size(75, 23);
-            this.btn_removeAction.TabIndex = 3;
-            this.btn_removeAction.Text = "Remove";
-            this.btn_removeAction.UseVisualStyleBackColor = true;
+            this.button1.Location = new System.Drawing.Point(302, 6);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 0;
+            this.button1.Text = "Hue Wizard";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Schreitica
             // 
@@ -473,6 +486,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
+            this.tabPage2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numUpDown_PollingRate)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -518,6 +532,7 @@
         private System.Windows.Forms.TreeView treeViewActions;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button btn_removeAction;
+        private System.Windows.Forms.Button button1;
     }
 }
 

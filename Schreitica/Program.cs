@@ -1,17 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Security;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using System.Net.NetworkInformation;
 using System.Windows.Forms;
-using Schreitica.Actions;
 using Schreitica.Properties;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Schreitica
 {
@@ -38,6 +29,8 @@ namespace Schreitica
             var passwd = CryptHelper.Decrypt(settings.OBSPassword);
 
             OBSConnection = new OBSConenction(settings.OBSUrl, passwd, settings.AutoConnectRun);
+
+
 
             
 
@@ -128,4 +121,5 @@ namespace Schreitica
             }
         }
     }
+
 }

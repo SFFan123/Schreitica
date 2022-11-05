@@ -81,5 +81,10 @@ namespace Schreitica
         {
             Program.USBHandler.StopReading();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            new HueWizard().ShowDialog(this);
+        }
     }
 }
