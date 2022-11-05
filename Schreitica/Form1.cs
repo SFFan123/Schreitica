@@ -84,7 +84,11 @@ namespace Schreitica
 
         private void button1_Click(object sender, EventArgs e)
         {
-            new HueWizard().ShowDialog(this);
+            var res = new HueWizard().ShowDialog(this);
+            if (res == DialogResult.OK)
+            {
+                //
+            }
         }
     }
 }
