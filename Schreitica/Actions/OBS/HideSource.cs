@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Schreitica.Actions.OBS
 {
-    public class HideSourceAction: OBSBase, IActionBase 
+    public class HideSource: OBSBase, IActionBase 
     {
-        public HideSourceAction(string SourceName, string SceneName = null)
+        public HideSource(string SourceName, string SceneName = null)
         {
             this.SceneName = SceneName;
             this.SourceName = SourceName;
@@ -32,6 +32,18 @@ namespace Schreitica.Actions.OBS
             obs.SetSceneItemEnabled(SceneName, id , false );
 
             return null;
+        }
+
+        public string ToXMLAction()
+        {
+            if (string.IsNullOrEmpty(SceneName))
+            {
+                return $"OBS.{nameof(HideSource)}({SourceName})";
+            }
+            else
+            {
+                return $"OBS.{nameof(HideSource)}({SourceName}, {SceneName})";
+            }
         }
     }
 }

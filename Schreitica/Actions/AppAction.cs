@@ -6,10 +6,11 @@ namespace Schreitica.Actions
     internal abstract class AppAction : IActionBase 
     { 
         public abstract Task<object> ExecuteAsync();
+        public abstract string ToXMLAction();
     }
 
 
-    internal class WaitForEventAction:AppAction, IDisposable
+    internal class WaitForEventAction:AppAction, IActionBase, IDisposable
     {
         public WaitForEventAction(string handel)
         {
@@ -33,6 +34,11 @@ namespace Schreitica.Actions
             await tcs.Task;
 
             return Task.CompletedTask;
+        }
+
+        public override string ToXMLAction()
+        {
+            return $"App.WaitFor({eventToListen})";
         }
 
         private void fire(object sender, EventArgs args)
@@ -65,6 +71,11 @@ namespace Schreitica.Actions
         {
             await Task.Delay(timeout_s * 100);
             return Task.CompletedTask;
+        }
+
+        public override string ToXMLAction()
+        {
+            return $"App.Wait({timeout_s})";
         }
     }
 }

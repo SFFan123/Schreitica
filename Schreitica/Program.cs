@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Net;
-using System.Net.NetworkInformation;
+using System.Collections.Generic;
 using System.Windows.Forms;
+using Schreitica.Actions;
 using Schreitica.Properties;
 
 namespace Schreitica
@@ -11,6 +11,7 @@ namespace Schreitica
         internal static Form Window;
         public static USBHandler USBHandler;
         public static OBSConenction OBSConnection;
+        public static List<IActionBase> Actions;
 
         /// <summary>
         /// The main entry point for the application.
@@ -23,18 +24,18 @@ namespace Schreitica
 
             Settings settings = Settings.Instance;
             settings.Load();
-            
+
+            Actions = new List<IActionBase>(settings.Actions.Length);
+            foreach (string settingsAction in settings.Actions)
+            {
+                Actions.Add(ParseAction(settingsAction));
+            }
+
 
             USBHandler = new USBHandler();
             var passwd = CryptHelper.Decrypt(settings.OBSPassword);
 
             OBSConnection = new OBSConenction(settings.OBSUrl, passwd, settings.AutoConnectRun);
-
-
-
-            
-
-            //var actions = ParseActions();
 
 
             //AppEvents.ThresholdExceeded += async (sender, args) =>
@@ -43,58 +44,48 @@ namespace Schreitica
             //    {
             //        await action.ExecuteAsync();
             //    }
-
             //};
 
             Application.Run(new MyCustomApplicationContext());
         }
 
 
+        public static IActionBase ParseAction(string commandString)
+        {
+            IActionBase action = null;
 
-        //public static List<IActionBase> ParseActions()
-        //{
-        //    string[] test = ("OBS.CurrentScene.ShowSource(ALARM)\n" +
-        //                  "App.WaitFor(BelowThresholdAgain)").Split('\n');
-            
-        //    List<IActionBase> actions = new List<IActionBase>();
+            string actionType = commandString.Substring(0, commandString.IndexOf("."));
+            commandString = commandString.Substring(commandString.IndexOf(".") + 1);
 
-        //    string actionType = string.Empty;
-        //    for (int i = 0; i < test.Length; i++)
-        //    {
-        //        string commandString = test[i];
-        //        actionType = commandString.Substring(0, commandString.IndexOf("."));
-        //        commandString = commandString.Substring(commandString.IndexOf(".")+1);
+            switch (actionType)
+            {
+                case "App":
+                {
+                    action = CommandParser.ParseAppCommand(commandString);
+                    break;
+                }
+                case "OBS":
+                {
+                    action = CommandParser.ParseOBSCommand(commandString);
+                    break;
+                }
+            }
 
-        //        switch (actionType)
-        //        {
-        //            case "App":
-        //            {
-        //                actions.Add(CommandParser.ParseAppCommand(commandString));
-        //                break;
-        //            }
-        //            case "OBS":
-        //            {
-        //                actions.Add(new DynamicOBSAction(OBSConnection.obs, CommandParser.ParseOBSCommand(commandString)));
-        //                break;
-        //            }
-        //        }
-
-        //    }
-
-        //    return actions;
-        //}
+            return action;
+        }
 
         public class MyCustomApplicationContext : ApplicationContext
         {
             private NotifyIcon trayIcon;
 
-            public MyCustomApplicationContext ()
+            public MyCustomApplicationContext()
             {
                 // Initialize Tray Icon
                 trayIcon = new NotifyIcon()
                 {
                     Icon = Resources.AppIcon,
-                    ContextMenu = new ContextMenu(new MenuItem[] {
+                    ContextMenu = new ContextMenu(new MenuItem[]
+                    {
                         new MenuItem("Show", Show),
                         new MenuItem("Exit", Exit)
                     }),
@@ -109,6 +100,7 @@ namespace Schreitica
                 {
                     Window = new Schreitica();
                 }
+
                 Window.Show();
             }
 
@@ -121,5 +113,4 @@ namespace Schreitica
             }
         }
     }
-
 }

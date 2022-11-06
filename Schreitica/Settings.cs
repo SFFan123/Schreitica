@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
+using Schreitica.Actions;
 
 namespace Schreitica
 {
@@ -17,14 +17,17 @@ namespace Schreitica
         private Settings()
         { }
 
-        public double DbThreshold;
+        public double DbThreshold { get; set; }
 
-        public bool AutoConnectRun;
+        public bool AutoConnectRun { get; set; }
         
-        public string OBSUrl = "";
+        public string OBSUrl { get; set; } = "";
 
-        public string OBSPassword = "";
+        public string OBSPassword { get; set; } = "";
 
+        public string HueURL { get; set; } = "";
+
+        public string HueUser { get; set; } = "";
 
         [XmlArray]
         public string[] Actions = Array.Empty<string>();
@@ -49,6 +52,9 @@ namespace Schreitica
                 this.OBSPassword = loadSettings.OBSPassword;
                 this.DbThreshold = loadSettings.DbThreshold;
                 this.OBSUrl = loadSettings.OBSUrl;
+                this.HueURL = loadSettings.HueURL;
+                this.HueUser = loadSettings.HueUser;
+                this.Actions = loadSettings.Actions;
             }
         }
 

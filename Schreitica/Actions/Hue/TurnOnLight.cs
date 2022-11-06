@@ -4,12 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Schreitica.Actions
+namespace Schreitica.Actions.Hue
 {
-    public interface IActionBase
+    public  class TurnOnLight
     {
-        Task<object> ExecuteAsync();
-
-        string ToXMLAction();
     }
 }

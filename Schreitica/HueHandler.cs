@@ -8,14 +8,16 @@ namespace Schreitica
 {
     internal class HueHandler
     {
-        public string userName { get; private set; }
+        private string userName { get; set; }
+        public string HueURL { get; private set; }
 
-        public HueHandler(string userName)
+        public HueHandler(string HueURL, string userName)
         {
             this.userName = userName;
+            this.HueURL = HueURL;
         }
 
-        public bool CanUseHue => !string.IsNullOrEmpty(userName);
+        public bool CanUseHue => !string.IsNullOrEmpty(HueURL) && !string.IsNullOrEmpty(userName);
 
 
 

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 
 namespace Schreitica.Actions.OBS
 {
-    public class ShowSourceAction: OBSBase, IActionBase 
+    public class ShowSource: OBSBase, IActionBase 
     {
-        public ShowSourceAction(string SourceName, string SceneName = null)
+        public ShowSource(string SourceName, string SceneName = null)
         {
             this.SceneName = SceneName;
             this.SourceName = SourceName;
@@ -32,6 +32,18 @@ namespace Schreitica.Actions.OBS
             obs.SetSceneItemEnabled(SceneName, id , true );
 
             return null;
+        }
+
+        public string ToXMLAction()
+        {
+            if (string.IsNullOrEmpty(SceneName))
+            {
+                return $"OBS.{nameof(ShowSource)}({SourceName})";
+            }
+            else
+            {
+                return $"OBS.{nameof(ShowSource)}({SourceName}, {SceneName})";
+            }
         }
     }
 }

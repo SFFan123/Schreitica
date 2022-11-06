@@ -3,9 +3,9 @@ using System.Threading.Tasks;
 
 namespace Schreitica.Actions.OBS
 {
-    public class SceneSwitch : OBSBase, IActionBase
+    public class SwitchScene : OBSBase, IActionBase
     {
-        public SceneSwitch(string SceneName)
+        public SwitchScene(string SceneName)
         {
             this.SceneName = SceneName;
         }
@@ -16,6 +16,11 @@ namespace Schreitica.Actions.OBS
         {
             GetOBSConnection().SetCurrentProgramScene(SceneName);
             return null;
+        }
+
+        public string ToXMLAction()
+        {
+            return $"OBS.{nameof(SwitchScene)}({SceneName}";
         }
     }
 }
