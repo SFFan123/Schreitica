@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Schreitica.Actions;
+using Schreitica.Actions.Hue;
 using Schreitica.Properties;
 
 namespace Schreitica
@@ -24,6 +25,8 @@ namespace Schreitica
 
             Settings settings = Settings.Instance;
             settings.Load();
+
+            new TurnOnLight().ExecuteAsync().GetAwaiter().GetResult();
 
             Actions = new List<IActionBase>(settings.Actions.Length);
             foreach (string settingsAction in settings.Actions)

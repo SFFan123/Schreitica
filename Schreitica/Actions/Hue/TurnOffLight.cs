@@ -7,17 +7,17 @@ using Newtonsoft.Json.Linq;
 
 namespace Schreitica.Actions.Hue
 {
-    public class TurnOnLight:HueBase
+    public class TurnOffLight:HueBase
     {
         public string LightName { get; set; } = string.Empty;
 
-        public const string body = "{\"on\":true}";
+        public const string body = "{\"on\":false}";
 
         public const string GetLightsURLFormat = "/api/{0}/lights/";
         public const string SetLightURLFormat = "/api/{0}/lights/{1}/state";
 
 
-        public TurnOnLight(string LightName)
+        public TurnOffLight(string LightName)
         {
             this.LightName = LightName;
         }
@@ -65,7 +65,7 @@ namespace Schreitica.Actions.Hue
 
         public override string ToXMLAction()
         {
-            return $"Hue.{nameof(TurnOnLight)}({LightName})";
+            return $"Hue.{nameof(TurnOffLight)}({LightName})";
         }
     }
 }
