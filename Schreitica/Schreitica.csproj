@@ -104,6 +104,7 @@
   <ItemGroup>
     <Compile Include="Actions\AppAction.cs" />
     <Compile Include="Actions\Hue\HueBase.cs" />
+    <Compile Include="Actions\Hue\SetLightBase.cs" />
     <Compile Include="Actions\Hue\TurnOffLight.cs" />
     <Compile Include="Actions\Hue\TurnOnLight.cs" />
     <Compile Include="Actions\IActionBase.cs" />

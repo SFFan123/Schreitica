@@ -72,6 +72,11 @@ namespace Schreitica
                     action = CommandParser.ParseOBSCommand(commandString);
                     break;
                 }
+                case "Hue":
+                {
+                    action = CommandParser.ParseHueCommand(commandString);
+                    break;
+                }
             }
 
             return action;

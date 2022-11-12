@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Schreitica.Actions;
+using Schreitica.Actions.Hue;
 using Schreitica.Actions.OBS;
 
 namespace Schreitica
 {
-
     internal static class CommandParser
     {
         private static Regex MethodRegex = new Regex(@"^(?<method>\w+)\(((?<parameter>\w+)(?:, )?)+\)");
@@ -76,11 +74,8 @@ namespace Schreitica
                     {
                         string name = methodMatch.Groups["parameter"].Value;
                         return new WaitForEventAction(name);
-
                     }
-                        
-                        
-
+                    
                     case "Wait":
                         return new WaitAction(int.Parse(methodMatch.Groups["parameter"].Value));
                 }
@@ -89,15 +84,37 @@ namespace Schreitica
             return null;
         }
 
-
-        private static void rmMatch(ref string str, string match)
+        public static HueBase ParseHueCommand(string command)
         {
-            str = str.Substring(match.Length);
+            if (string.IsNullOrEmpty(command))
+                return null;
+            command = command.Trim();
+            if (command == string.Empty)
+                return null;
 
-            if (str.Length > 0 && str[0] == '.')
+
+            Match methodMatch;
+            
+            methodMatch = MethodRegex.Match(command);
+            if (methodMatch.Success)
             {
-                str = str.Substring(1);
+                string method = methodMatch.Groups["method"].Value;
+
+                switch (method)
+                {
+                    case nameof(TurnOffLight):
+                    {
+                        string name = methodMatch.Groups["parameter"].Value;
+                        return new TurnOffLight(name);
+                    }
+                    case nameof(TurnOnLight):
+                    {
+                        string name = methodMatch.Groups["parameter"].Value;
+                        return new TurnOnLight(name);
+                    }
+                }
             }
+            return null;
         }
     }
 

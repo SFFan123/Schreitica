@@ -1,22 +1,11 @@
-﻿using System;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
+﻿using System.Threading.Tasks;
 
 namespace Schreitica.Actions.Hue
 {
-    public class TurnOffLight:HueBase
+    public class TurnOffLight:SetLightBase
     {
-        public string LightName { get; set; } = string.Empty;
-
-        public const string body = "{\"on\":false}";
-
-        public const string GetLightsURLFormat = "/api/{0}/lights/";
-        public const string SetLightURLFormat = "/api/{0}/lights/{1}/state";
-
-
+        public string LightName { get; set; }
+        
         public TurnOffLight(string LightName)
         {
             this.LightName = LightName;
@@ -24,42 +13,9 @@ namespace Schreitica.Actions.Hue
 
         public override async Task<object> ExecuteAsync()
         {
-            using (HttpClient httpClient = new HttpClient())
-            {
-                httpClient.BaseAddress = new Uri(Settings.Instance.HueURL);
-
-                var result =  await httpClient.GetAsync( string.Format(GetLightsURLFormat, Settings.Instance.HueUser));
-
-                if (result.StatusCode != HttpStatusCode.OK)
-                {
-                    // error
-                    throw new Exception();
-                }
-
-                JObject resultContent = JObject.Parse( await result.Content.ReadAsStringAsync());
-                string id = string.Empty;
-                foreach (JProperty property in resultContent.Properties())
-                {
-                    if (property.Value["name"].ToString() == LightName)
-                    {
-                        id = property.Name;
-                        break;
-                    }
-                }
-
-                if (string.IsNullOrEmpty(id))
-                    throw new Exception();
-
-                HttpContent request = new StringContent(body);
-                request.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
-
-                var setResult = await httpClient.PutAsync(string.Format(SetLightURLFormat, Settings.Instance.HueUser, id), request);
-
-                if (!setResult.IsSuccessStatusCode)
-                {
-                    throw new Exception();
-                }
-            }
+            await base.ExecuteAsync();
+            
+            await SetLight(LightName, "{\"on\":false}");
             return Task.CompletedTask;
         }
 
