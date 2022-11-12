@@ -25,9 +25,7 @@ namespace Schreitica
 
             Settings settings = Settings.Instance;
             settings.Load();
-
-            new TurnOnLight().ExecuteAsync().GetAwaiter().GetResult();
-
+            
             Actions = new List<IActionBase>(settings.Actions.Length);
             foreach (string settingsAction in settings.Actions)
             {
