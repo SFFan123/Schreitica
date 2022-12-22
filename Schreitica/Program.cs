@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Schreitica.Actions;
 using Schreitica.Actions.Hue;
 using Schreitica.Properties;
+using Schreitica.UI;
 
 namespace Schreitica
 {
@@ -32,22 +33,21 @@ namespace Schreitica
                 Actions.Add(ParseAction(settingsAction));
             }
 
-
             USBHandler = new USBHandler();
             var passwd = CryptHelper.Decrypt(settings.OBSPassword);
 
             OBSConnection = new OBSConenction(settings.OBSUrl, passwd, settings.AutoConnectRun);
 
 
-            //AppEvents.ThresholdExceeded += async (sender, args) =>
-            //{
-            //    foreach (IActionBase action in actions)
-            //    {
-            //        await action.ExecuteAsync();
-            //    }
-            //};
-
+            AppEvents.ThresholdExceeded += async (sender, args) =>
+            {
+                foreach (IActionBase action in Actions)
+                {
+                    await action.ExecuteAsync();
+                }
+            };
             Application.Run(new MyCustomApplicationContext());
+            
         }
 
 

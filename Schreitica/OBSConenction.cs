@@ -13,7 +13,7 @@ using OBSWebsocketDotNet.Types.Events;
 
 namespace Schreitica
 {
-    public class OBSConenction
+    public class OBSConenction : IDisposable
     {
         private static OBSConenction instance;
         public static OBSConenction Instance => instance;
@@ -68,23 +68,11 @@ namespace Schreitica
             });
         }
 
-        private async void OnConnect(object sender, EventArgs e)
+        private void OnConnect(object sender, EventArgs e)
         {
             AppEvents.RaiseOBSConnectionStateChanged(this, new ConnectionChangedEventArgs(true));
 
             shouldReconnect = true;
-
-            //string test = "CurrentScene.ShowSource(ALARM)";
-
-
-            //string cssharpScript = CommandParser.ParseCommand(test);
-
-            //await CSharpScript.EvaluateAsync(cssharpScript,
-            //    ScriptOptions.Default
-            //        .AddReferences(typeof(Enumerable).GetTypeInfo().Assembly)
-            //        .AddImports("System", "System.Linq"),
-            //    globals: this);
-
         }
 
 
@@ -93,6 +81,16 @@ namespace Schreitica
             AppEvents.RaiseOBSConnectionStateChanged(this, new ConnectionChangedEventArgs(false));
             if(shouldReconnect)
                 Connect();
+        }
+
+        public void Dispose()
+        {
+            shouldReconnect = false;
+            obs.Connected -= OnConnect;
+            obs.Disconnected -= OnDisconnect;
+            obs.Disconnect();
+            obs = null;
+            GC.Collect();
         }
     }
 }

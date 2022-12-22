@@ -20,7 +20,6 @@ namespace Schreitica
                 return null;
 
             IActionBase resultCommand = null;
-            PropertyInfo prop;
             Match methodMatch;
             
             methodMatch = MethodRegex.Match(command);
