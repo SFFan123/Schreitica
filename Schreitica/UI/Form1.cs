@@ -13,10 +13,10 @@ namespace Schreitica
 {
     public partial class Schreitica : Form
     {
-        private List<IActionBase> Actions; 
+        private List<IActionBase> _actions; 
         public Schreitica()
         {
-            this.Icon = Resources.AppIcon;
+            Icon = Resources.AppIcon;
             InitializeComponent();
 
             UsbConnectionStateChanged(null, new ConnectionChangedEventArgs( Program.USBHandler.IsConnected ));
@@ -39,11 +39,12 @@ namespace Schreitica
 
         private void init_LoadActions()
         {
-            Actions = Program.Actions;
-            foreach (var action in Actions)
+            _actions = Program.Actions;
+            foreach (var action in _actions)
             {
                 addNodeToTree(action);
             }
+            treeViewActions.Nodes[0].Expand();
         }
 
         private void addNodeToTree(IActionBase action)
@@ -72,9 +73,16 @@ namespace Schreitica
 
         private void init_GetValues()
         {
-            txt_OBS_Password.Text =
-                new NetworkCredential(string.Empty, CryptHelper.Decrypt(Settings.Instance.OBSPassword)).Password;
+            if (!string.IsNullOrEmpty(Settings.Instance.OBSPassword))
+            {
+                txt_OBS_Password.Text =
+                    new NetworkCredential(string.Empty, CryptHelper.Decrypt(Settings.Instance.OBSPassword)).Password;
+            }
+            
             txt_OBS_URL.Text = Settings.Instance.OBSUrl;
+
+            txt_Hue_URL.Text = Settings.Instance.HueURL;
+            txt_Hue_User.Text = Settings.Instance.HueUser;
             init_ParsePollingDelay();
             init_LoadActions();
         }
@@ -167,7 +175,7 @@ namespace Schreitica
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            txt_Hue_User.PasswordChar = checkBox_ShowOBSPassword.Checked ? '\0' : '*';
+            txt_Hue_User.PasswordChar = checkBox1.Checked ? '\0' : '*';
         }
 
         private void btn_ApplyHue_Click(object sender, EventArgs e)
@@ -181,7 +189,7 @@ namespace Schreitica
             var from = new ActionForm();
             if (from.ShowDialog(this) == DialogResult.OK)
             {
-                Actions.Add(from.ResultAction);
+                _actions.Add(from.ResultAction);
                 
                 addNodeToTree(from.ResultAction);
             }
@@ -199,11 +207,11 @@ namespace Schreitica
             
             if (!draggedNode.Equals(targetNode) && targetNode != null)
             {
-                var act = Actions[draggedNode.Index];
-                Actions.Remove(act);
+                var act = _actions[draggedNode.Index];
+                _actions.Remove(act);
                 draggedNode.Remove();
                 treeViewActions.Nodes[0].Nodes.Insert(targetNode.Index, draggedNode);
-                Actions.Insert(draggedNode.Index, act);
+                _actions.Insert(draggedNode.Index, act);
             }
         }
         
@@ -219,7 +227,7 @@ namespace Schreitica
 
         private void btn_applyActions_Click(object sender, EventArgs e)
         {
-            Program.Actions = Actions;
+            Program.Actions = _actions;
         }
 
         private void btn_removeAction_Click(object sender, EventArgs e)
@@ -228,7 +236,7 @@ namespace Schreitica
             {
                 if (node.IsSelected)
                 {
-                    Actions.RemoveAt(node.Index);
+                    _actions.RemoveAt(node.Index);
                     node.Remove();
                     return;
                 }

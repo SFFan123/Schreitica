@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Management.Instrumentation;
-using System.Text;
 using System.Threading.Tasks;
 using HidLibrary;
 
@@ -111,10 +108,6 @@ namespace Schreitica
                 {
                     AppEvents.RaiseBelowThresholdAgain(this, EventArgs.Empty);
                 }
-
-
-                // LOG
-                //Console.WriteLine($"{db:F1} dBA");
             }
         }
 
