@@ -1,15 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Net;
-using System.Reflection;
 using System.Security;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
 using OBSWebsocketDotNet;
 using OBSWebsocketDotNet.Communication;
-using OBSWebsocketDotNet.Types;
-using OBSWebsocketDotNet.Types.Events;
 
 namespace Schreitica
 {
@@ -35,15 +29,7 @@ namespace Schreitica
 
             passwd = password;
             this.url = url;
-
-            //obs.CurrentProgramSceneChanged += onCurrentProgramSceneChanged;
-            //obs.CurrentSceneCollectionChanged += onSceneCollectionChanged;
-            //obs.CurrentProfileChanged += onCurrentProfileChanged;
-            //obs.CurrentSceneTransitionChanged += onCurrentSceneTransitionChanged;
-            //obs.CurrentSceneTransitionDurationChanged += onCurrentSceneTransitionDurationChanged;
-
-            //obs.StreamStateChanged += onStreamStateChanged;
-            //obs.RecordStateChanged += onRecordStateChanged;
+            
             if (autoConnected)
             {
                 Connect();

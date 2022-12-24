@@ -13,14 +13,15 @@ namespace Schreitica
 {
     public partial class Schreitica : Form
     {
-        private List<IActionBase> _actions; 
+        private List<IActionBase> _actions;
+
         public Schreitica()
         {
             Icon = Resources.AppIcon;
             InitializeComponent();
 
-            UsbConnectionStateChanged(null, new ConnectionChangedEventArgs( Program.USBHandler.IsConnected ));
-            OBSConnectionStateChanged(null, new ConnectionChangedEventArgs( OBSConenction.Instance.IsConnected ));
+            UsbConnectionStateChanged(null, new ConnectionChangedEventArgs(Program.USBHandler.IsConnected));
+            OBSConnectionStateChanged(null, new ConnectionChangedEventArgs(OBSConenction.Instance.IsConnected));
 
             AppEvents.USBConnectionStateChanged += UsbConnectionStateChanged;
             AppEvents.OBSConnectionStateChanged += OBSConnectionStateChanged;
@@ -44,6 +45,7 @@ namespace Schreitica
             {
                 addNodeToTree(action);
             }
+
             treeViewActions.Nodes[0].Expand();
         }
 
@@ -52,21 +54,24 @@ namespace Schreitica
             int OBSImageIndex = 1;
             int AppImageIndex = 2;
             int HueImageIndex = 3;
-            
-            
+
+
             var type = action.GetType();
             string name = action.ToXMLAction();
             if (type.IsSubclassOf(typeof(OBSBase)))
             {
-                treeViewActions.Nodes[0].Nodes.Add(name, name.Substring(name.IndexOf(".")+1), OBSImageIndex, selectedImageIndex:OBSImageIndex);
+                treeViewActions.Nodes[0].Nodes.Add(name, name.Substring(name.IndexOf(".") + 1), OBSImageIndex,
+                    selectedImageIndex: OBSImageIndex);
             }
             else if (type.IsSubclassOf(typeof(AppAction)))
             {
-                treeViewActions.Nodes[0].Nodes.Add(name, name.Substring(name.IndexOf(".")+1), AppImageIndex, selectedImageIndex:AppImageIndex);
+                treeViewActions.Nodes[0].Nodes.Add(name, name.Substring(name.IndexOf(".") + 1), AppImageIndex,
+                    selectedImageIndex: AppImageIndex);
             }
             else if (type.IsSubclassOf(typeof(HueBase)))
             {
-                treeViewActions.Nodes[0].Nodes.Add(name, name.Substring(name.IndexOf(".")+1), HueImageIndex, selectedImageIndex:HueImageIndex);
+                treeViewActions.Nodes[0].Nodes.Add(name, name.Substring(name.IndexOf(".") + 1), HueImageIndex,
+                    selectedImageIndex: HueImageIndex);
             }
         }
 
@@ -78,7 +83,7 @@ namespace Schreitica
                 txt_OBS_Password.Text =
                     new NetworkCredential(string.Empty, CryptHelper.Decrypt(Settings.Instance.OBSPassword)).Password;
             }
-            
+
             txt_OBS_URL.Text = Settings.Instance.OBSUrl;
 
             txt_Hue_URL.Text = Settings.Instance.HueURL;
@@ -92,6 +97,7 @@ namespace Schreitica
             this.btn_Start.Enabled = e.Connected;
             this.toolstrip_lbl_Connection.Text = e.Connected ? "Connected" : "Disconnected";
         }
+
         private void OBSConnectionStateChanged(object sender, ConnectionChangedEventArgs e)
         {
             this.toolStripStatusLabel_OBS_Status.Text = e.Connected ? "Connected" : "Disconnected";
@@ -144,7 +150,6 @@ namespace Schreitica
         {
             if (e.Node.Parent != null)
             {
-                
             }
         }
 
@@ -153,8 +158,8 @@ namespace Schreitica
             string textval = txt_Treshold.Text.Trim();
             if (string.IsNullOrEmpty(textval) || string.IsNullOrWhiteSpace(textval))
                 return;
-            
-            if(Double.TryParse(txt_Treshold.Text, out double newval))
+
+            if (Double.TryParse(txt_Treshold.Text, out double newval))
             {
                 Settings.Instance.DbThreshold = newval;
             }
@@ -168,9 +173,10 @@ namespace Schreitica
         {
             Settings.Instance.OBSPassword = CryptHelper.Encrypt(txt_OBS_Password.Text);
             Settings.Instance.OBSUrl = txt_OBS_URL.Text;
-            
+
             Program.OBSConnection.Dispose();
-            Program.OBSConnection = new OBSConenction(Settings.Instance.OBSUrl, CryptHelper.Decrypt(Settings.Instance.OBSPassword), true);
+            Program.OBSConnection = new OBSConenction(Settings.Instance.OBSUrl,
+                CryptHelper.Decrypt(Settings.Instance.OBSPassword), true);
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
@@ -190,21 +196,21 @@ namespace Schreitica
             if (from.ShowDialog(this) == DialogResult.OK)
             {
                 _actions.Add(from.ResultAction);
-                
+
                 addNodeToTree(from.ResultAction);
             }
-            
+
             from.Dispose();
         }
 
         private void treeViewActions_DragDrop(object sender, DragEventArgs e)
         {
             Point targetPoint = treeViewActions.PointToClient(new Point(e.X, e.Y));
-            
+
             TreeNode targetNode = treeViewActions.GetNodeAt(targetPoint);
-            
+
             TreeNode draggedNode = (TreeNode)e.Data.GetData(typeof(TreeNode));
-            
+
             if (!draggedNode.Equals(targetNode) && targetNode != null)
             {
                 var act = _actions[draggedNode.Index];
@@ -214,7 +220,7 @@ namespace Schreitica
                 _actions.Insert(draggedNode.Index, act);
             }
         }
-        
+
         private void treeView1_ItemDrag(object sender, ItemDragEventArgs e)
         {
             DoDragDrop(e.Item, DragDropEffects.Move);

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Schreitica.Actions;
-using Schreitica.Actions.Hue;
 using Schreitica.Properties;
-using Schreitica.UI;
 
 namespace Schreitica
 {
@@ -26,7 +24,7 @@ namespace Schreitica
 
             Settings settings = Settings.Instance;
             settings.Load();
-            
+
             Actions = new List<IActionBase>(settings.Actions.Length);
             foreach (string settingsAction in settings.Actions)
             {
@@ -47,7 +45,6 @@ namespace Schreitica
                 }
             };
             Application.Run(new MyCustomApplicationContext());
-            
         }
 
 
@@ -114,7 +111,6 @@ namespace Schreitica
             {
                 // Hide tray icon, otherwise it will remain shown until user mouses over it
                 trayIcon.Visible = false;
-
                 Application.Exit();
             }
         }

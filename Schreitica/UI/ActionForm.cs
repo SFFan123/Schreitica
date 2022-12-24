@@ -18,7 +18,7 @@ namespace Schreitica.UI
 
             OBSActions = new object[] { nameof(HideSource), nameof(ShowSource), nameof(SwitchScene) };
             AppActions = new object[] { "Wait", "WaitFor" };
-            HueActions = new object[] { nameof(TurnOnLight), nameof(TurnOffLight) };
+            HueActions = new object[] { nameof(TurnOnLight), nameof(TurnOffLight), nameof(TurnOnGroup), nameof(TurnOffGroup) };
 
 
             paramDictionary = new Dictionary<object, string>()
@@ -30,12 +30,14 @@ namespace Schreitica.UI
                 {"WaitFor", "Eventname" },
                 {nameof(TurnOnLight), "LightName" },
                 {nameof(TurnOffLight), "LightName" },
+                {nameof(TurnOnGroup), "GroupName" },
+                {nameof(TurnOffGroup), "GroupName" },
             };
         }
 
         public ActionForm(object ActionType, object ActionName, object Parameter):this()
         {
-            // TODO
+            // TODO Edit.
         }
 
         protected override void OnClosing(CancelEventArgs e)

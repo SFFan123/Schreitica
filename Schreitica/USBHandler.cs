@@ -7,11 +7,36 @@ namespace Schreitica
 {
     public class USBHandler
     {
-        private int VID = 0x0483;
-        private int PID = 0x5750;
-        private bool _isConnected = false;
+        private bool _isConnected;
 
         private HidDevice device;
+        private readonly int PID = 0x5750;
+        public int pollingDelay = 1000;
+        private Task PollingTask;
+        private Task ReadingTask;
+        private bool running;
+        private readonly int VID = 0x0483;
+
+
+        public USBHandler()
+        {
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    device = HidDevices.Enumerate(VID, PID).FirstOrDefault();
+                    if (device == null)
+                        await Task.Delay(1000);
+                    else
+                        break;
+                }
+
+                device.MonitorDeviceEvents = true;
+
+                device.Removed += delegate { IsConnected = false; };
+                device.Inserted += delegate { IsConnected = true; };
+            });
+        }
 
         public bool IsConnected
         {
@@ -25,47 +50,10 @@ namespace Schreitica
                 }
             }
         }
-        private bool running = false;
-        public int pollingDelay = 1000;
-        private Task PollingTask;
-        private Task ReadingTask;
-
-
-        public USBHandler()
-        {
-            Task.Run( async () =>
-            {
-                while (true)
-                {
-                    device = HidDevices.Enumerate(VID, PID).FirstOrDefault();
-                    if (device == null)
-                    {
-                        await Task.Delay(1000);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                device.MonitorDeviceEvents = true;
-               
-                device.Removed += delegate
-                {
-                    IsConnected = false;
-                };
-                device.Inserted += delegate
-                {
-                    IsConnected = true;
-                };
-            });
-        }
 
         public void StartReading()
         {
-            if (!IsConnected)
-            {
-                throw new ApplicationException();
-            }
+            if (!IsConnected) throw new ApplicationException();
             running = false;
             PollingTask?.Dispose();
 
@@ -82,32 +70,26 @@ namespace Schreitica
         }
 
 
-       
         private async Task ReadTask()
         {
             while (running)
-            { 
+            {
                 while (!IsConnected)
                     await Task.Delay(1000);
 
                 var report = await device.ReadReportAsync();
-                
+
                 var dat = report.Data;
-                int rawVal = (dat[0] << 8 | dat[1]); 
-                double db = rawVal / 10.0;
+                var rawVal = (dat[0] << 8) | dat[1];
+                var db = rawVal / 10.0;
 
                 db = Math.Round(db, 1);
 
                 AppEvents.RaiseOnReadOut(this, new ReadOutEventArgs(db));
 
                 if (db > Settings.Instance.DbThreshold)
-                {
                     AppEvents.RaiseThresholdExceeded(this, EventArgs.Empty);
-                }
-                else if( AppEvents.CanRaiseBlowThreshold)
-                {
-                    AppEvents.RaiseBelowThresholdAgain(this, EventArgs.Empty);
-                }
+                else if (AppEvents.CanRaiseBlowThreshold) AppEvents.RaiseBelowThresholdAgain(this, EventArgs.Empty);
             }
         }
 
