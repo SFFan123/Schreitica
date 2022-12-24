@@ -29,7 +29,7 @@ namespace Schreitica.Actions.Hue
                 if (result.StatusCode != HttpStatusCode.OK)
                 {
                     // error
-                    throw new Exception();
+                    throw new Exception("Error Querying Lights");
                 }
 
                 JObject resultContent = JObject.Parse(await result.Content.ReadAsStringAsync());
@@ -44,7 +44,7 @@ namespace Schreitica.Actions.Hue
                 }
 
                 if (string.IsNullOrEmpty(id))
-                    throw new Exception();
+                    throw new Exception("Error Finding Light");
 
                 HttpContent request = new StringContent(body);
                 request.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
@@ -54,7 +54,7 @@ namespace Schreitica.Actions.Hue
 
                 if (!setResult.IsSuccessStatusCode)
                 {
-                    throw new Exception();
+                    throw new Exception("Error Setting Light state");
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace Schreitica.Actions.Hue
                 if (result.StatusCode != HttpStatusCode.OK)
                 {
                     // error
-                    throw new Exception();
+                    throw new Exception("Error Querying Groups");
                 }
 
                 JObject resultContent = JObject.Parse(await result.Content.ReadAsStringAsync());
@@ -88,7 +88,7 @@ namespace Schreitica.Actions.Hue
                 }
 
                 if (string.IsNullOrEmpty(id))
-                    throw new Exception();
+                    throw new Exception("Error Finding Group");
                 
 
                 HttpContent request = new StringContent(body);
@@ -99,7 +99,7 @@ namespace Schreitica.Actions.Hue
 
                 if (!setResult.IsSuccessStatusCode)
                 {
-                    throw new Exception();
+                    throw new Exception("Error Setting Group state");
                 }
             }
         }

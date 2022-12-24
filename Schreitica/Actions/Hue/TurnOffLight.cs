@@ -23,5 +23,7 @@ namespace Schreitica.Actions.Hue
         {
             return $"Hue.{nameof(TurnOffLight)}({LightName})";
         }
+
+        public override string LogName => "Hue." + nameof(TurnOffLight);
     }
 }

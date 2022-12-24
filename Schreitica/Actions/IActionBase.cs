@@ -11,5 +11,7 @@ namespace Schreitica.Actions
         Task<object> ExecuteAsync();
 
         string ToXMLAction();
+
+        string LogName { get; }
     }
 }

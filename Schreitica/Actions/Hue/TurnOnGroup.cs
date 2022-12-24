@@ -22,6 +22,8 @@ namespace Schreitica.Actions.Hue
         {
             return $"Hue.{nameof(Hue.TurnOnGroup)}({GroupName})";
         }
+
+        public override string LogName => "Hue." + nameof(TurnOnGroup);
     }
     
 }

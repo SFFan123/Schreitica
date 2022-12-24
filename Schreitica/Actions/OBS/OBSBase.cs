@@ -6,9 +6,9 @@ namespace Schreitica.Actions.OBS
 {
     public class OBSBase
     {
-        protected OBSWebsocket GetOBSConnection()
+        protected OBSWebsocket GetObsConnection()
         {
-            if (!Program.OBSConnection?.IsConnected ?? false)
+            if (!(Program.OBSConnection?.IsConnected ?? false))
             {
                 throw new ApplicationException("Obs not connected");
             }
@@ -16,11 +16,11 @@ namespace Schreitica.Actions.OBS
             return Program.OBSConnection.obs;
         }
 
-        protected string CurrentSceneName => GetOBSConnection().GetCurrentProgramScene();
+        protected string CurrentSceneName => GetObsConnection().GetCurrentProgramScene();
 
         public void T(string sceneName, string sourceName)
         {
-            var obs = GetOBSConnection();
+            var obs = GetObsConnection();
             
         }
 

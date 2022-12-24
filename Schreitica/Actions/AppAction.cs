@@ -7,6 +7,7 @@ namespace Schreitica.Actions
     { 
         public abstract Task<object> ExecuteAsync();
         public abstract string ToXMLAction();
+        public abstract string LogName { get; }
     }
 
 
@@ -41,6 +42,8 @@ namespace Schreitica.Actions
             return $"App.WaitFor({eventToListen})";
         }
 
+        public override string LogName => "App.WaitFor";
+
         private void fire(object sender, EventArgs args)
         {
             tcs.TrySetResult(true);
@@ -66,6 +69,7 @@ namespace Schreitica.Actions
         {
             timeout_s = timeout;
         }
+        public override string LogName => "App.Wait";
         public int timeout_s { get; }
         public override async Task<object> ExecuteAsync()
         {

@@ -22,5 +22,6 @@ namespace Schreitica.Actions.Hue
             return Task.FromResult((object)true);
         }
         public abstract string ToXMLAction();
+        public abstract string LogName { get; }
     }
 }

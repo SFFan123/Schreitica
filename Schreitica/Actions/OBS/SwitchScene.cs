@@ -14,7 +14,7 @@ namespace Schreitica.Actions.OBS
         
         public Task<object> ExecuteAsync()
         {
-            GetOBSConnection().SetCurrentProgramScene(SceneName);
+            GetObsConnection().SetCurrentProgramScene(SceneName);
             return null;
         }
 
@@ -22,5 +22,7 @@ namespace Schreitica.Actions.OBS
         {
             return $"OBS.{nameof(SwitchScene)}({SceneName}";
         }
+
+        public string LogName => "OBS." + nameof(SwitchScene);
     }
 }

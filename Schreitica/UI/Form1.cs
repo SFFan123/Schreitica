@@ -257,5 +257,15 @@ namespace Schreitica
             Settings.Instance.USBPollingDelay = delay;
             Program.USBHandler.pollingDelay = delay;
         }
+
+        private void Menu_Test_FireNoiseLevelBelowThresholdAgain_Click(object sender, EventArgs e)
+        {
+            AppEvents.RaiseBelowThresholdAgain(sender, e);
+        }
+
+        private void Menu_Test_FireNoiseLevelReached_Click(object sender, EventArgs e)
+        {
+            AppEvents.RaiseThresholdExceeded(sender, e);
+        }
     }
 }

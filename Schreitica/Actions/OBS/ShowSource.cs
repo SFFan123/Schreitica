@@ -17,7 +17,7 @@ namespace Schreitica.Actions.OBS
 
         public Task<object> ExecuteAsync()
         {
-            var obs = GetOBSConnection();
+            var obs = GetObsConnection();
 
             if (string.IsNullOrEmpty(SceneName))
             {
@@ -45,5 +45,7 @@ namespace Schreitica.Actions.OBS
                 return $"OBS.{nameof(ShowSource)}({SourceName}, {SceneName})";
             }
         }
+
+        public string LogName => "OBS." + nameof(ShowSource);
     }
 }

@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("NoiseLevelReached");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("NoiseLevelReached");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Schreitica));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -75,6 +75,9 @@
             this.txt_Hue_URL = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
             this.numUpDown_PollingRate = new System.Windows.Forms.NumericUpDown();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.Menu_Test_FireNoiseLevelReached = new System.Windows.Forms.ToolStripMenuItem();
+            this.Menu_Test_FireNoiseLevelBelowThresholdAgain = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1.SuspendLayout();
             this.grpboxAction.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -242,10 +245,10 @@
             this.treeViewActions.ImageList = this.imageList1;
             this.treeViewActions.Location = new System.Drawing.Point(6, 19);
             this.treeViewActions.Name = "treeViewActions";
-            treeNode1.Name = "NoiseLevelReached";
-            treeNode1.Text = "NoiseLevelReached";
+            treeNode2.Name = "NoiseLevelReached";
+            treeNode2.Text = "NoiseLevelReached";
             this.treeViewActions.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode2});
             this.treeViewActions.SelectedImageIndex = 0;
             this.treeViewActions.Size = new System.Drawing.Size(370, 334);
             this.treeViewActions.TabIndex = 2;
@@ -288,6 +291,9 @@
             // 
             this.toolStripMenuItem_Exit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.autoConnectRunToolStripMenuItem,
+            this.toolStripSeparator3,
+            this.Menu_Test_FireNoiseLevelReached,
+            this.Menu_Test_FireNoiseLevelBelowThresholdAgain,
             this.toolStripSeparator1,
             this.saveSettingToolStripMenuItem,
             this.toolStripSeparator2,
@@ -300,30 +306,30 @@
             // 
             this.autoConnectRunToolStripMenuItem.CheckOnClick = true;
             this.autoConnectRunToolStripMenuItem.Name = "autoConnectRunToolStripMenuItem";
-            this.autoConnectRunToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.autoConnectRunToolStripMenuItem.Size = new System.Drawing.Size(294, 22);
             this.autoConnectRunToolStripMenuItem.Text = "Auto Connect/Run";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(171, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(291, 6);
             // 
             // saveSettingToolStripMenuItem
             // 
             this.saveSettingToolStripMenuItem.Name = "saveSettingToolStripMenuItem";
-            this.saveSettingToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.saveSettingToolStripMenuItem.Size = new System.Drawing.Size(294, 22);
             this.saveSettingToolStripMenuItem.Text = "Save Setting";
             this.saveSettingToolStripMenuItem.Click += new System.EventHandler(this.saveSettingToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(171, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(291, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(294, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -520,6 +526,25 @@
             0,
             0});
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(291, 6);
+            // 
+            // Menu_Test_FireNoiseLevelReached
+            // 
+            this.Menu_Test_FireNoiseLevelReached.Name = "Menu_Test_FireNoiseLevelReached";
+            this.Menu_Test_FireNoiseLevelReached.Size = new System.Drawing.Size(294, 22);
+            this.Menu_Test_FireNoiseLevelReached.Text = "Test: Fire NoiseLevelReached";
+            this.Menu_Test_FireNoiseLevelReached.Click += new System.EventHandler(this.Menu_Test_FireNoiseLevelReached_Click);
+            // 
+            // Menu_Test_FireNoiseLevelBelowThresholdAgain
+            // 
+            this.Menu_Test_FireNoiseLevelBelowThresholdAgain.Name = "Menu_Test_FireNoiseLevelBelowThresholdAgain";
+            this.Menu_Test_FireNoiseLevelBelowThresholdAgain.Size = new System.Drawing.Size(294, 22);
+            this.Menu_Test_FireNoiseLevelBelowThresholdAgain.Text = "Test: Fire NoiseLevelBelowThresholdAgain";
+            this.Menu_Test_FireNoiseLevelBelowThresholdAgain.Click += new System.EventHandler(this.Menu_Test_FireNoiseLevelBelowThresholdAgain_Click);
+            // 
             // Schreitica
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -608,6 +633,9 @@
         private System.Windows.Forms.Button btn_removeAction;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button btn_applyActions;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Test_FireNoiseLevelReached;
+        private System.Windows.Forms.ToolStripMenuItem Menu_Test_FireNoiseLevelBelowThresholdAgain;
     }
 }
 
