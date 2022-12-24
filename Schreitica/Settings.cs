@@ -32,6 +32,8 @@ namespace Schreitica
         [XmlArray]
         public string[] Actions = Array.Empty<string>();
 
+        public int USBPollingDelay { get; set; }
+
 
         public void Load()
         {
@@ -51,6 +53,7 @@ namespace Schreitica
                 this.AutoConnectRun = loadSettings.AutoConnectRun;
                 this.OBSPassword = loadSettings.OBSPassword;
                 this.DbThreshold = loadSettings.DbThreshold;
+                this.USBPollingDelay = loadSettings.USBPollingDelay;
                 this.OBSUrl = loadSettings.OBSUrl;
                 this.HueURL = loadSettings.HueURL;
                 this.HueUser = loadSettings.HueUser;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Net;
 using System.Windows.Forms;
 using Schreitica.Actions;
@@ -25,7 +26,7 @@ namespace Schreitica
 
             AppEvents.USBConnectionStateChanged += UsbConnectionStateChanged;
             AppEvents.OBSConnectionStateChanged += OBSConnectionStateChanged;
-
+            
             init_GetValues();
         }
 
@@ -192,7 +193,7 @@ namespace Schreitica
 
         private void btn_Tree_Add_Click(object sender, EventArgs e)
         {
-            var from = new ActionForm();
+            var from = new ActionForm("Create Action");
             if (from.ShowDialog(this) == DialogResult.OK)
             {
                 _actions.Add(from.ResultAction);
@@ -247,6 +248,14 @@ namespace Schreitica
                     return;
                 }
             }
+        }
+
+        private void btn_ApplyPolling_Click(object sender, EventArgs e)
+        {
+            double hz = (double)numUpDown_PollingRate.Value;
+            int delay = (int) (1/hz * 1000);
+            Settings.Instance.USBPollingDelay = delay;
+            Program.USBHandler.pollingDelay = delay;
         }
     }
 }

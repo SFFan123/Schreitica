@@ -11,15 +11,19 @@ namespace Schreitica
 
         private HidDevice device;
         private readonly int PID = 0x5750;
-        public int pollingDelay = 1000;
+        private readonly int VID = 0x0483;
+        
+        /// <summary>
+        /// Delay in ms
+        /// </summary>
+        public int pollingDelay;
         private Task PollingTask;
         private Task ReadingTask;
         private bool running;
-        private readonly int VID = 0x0483;
-
 
         public USBHandler()
         {
+            pollingDelay = Settings.Instance.USBPollingDelay == default? 1000: Settings.Instance.USBPollingDelay;
             Task.Run(async () =>
             {
                 while (true)

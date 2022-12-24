@@ -12,6 +12,7 @@ namespace Schreitica
         public static USBHandler USBHandler;
         public static OBSConenction OBSConnection;
         public static List<IActionBase> Actions;
+        public static NotifyIcon TrayIcon;
 
         /// <summary>
         /// The main entry point for the application.
@@ -41,7 +42,15 @@ namespace Schreitica
             {
                 foreach (IActionBase action in Actions)
                 {
-                    await action.ExecuteAsync();
+                    try
+                    {
+                        await action.ExecuteAsync();
+                    }
+                    catch (Exception e)
+                    {
+                        TrayIcon.ShowBalloonTip(1000, "Fehler in Aktion", "Fehler action: " + action.GetType().Name, ToolTipIcon.Error);
+                        Console.WriteLine(e);
+                    }
                 }
             };
             Application.Run(new MyCustomApplicationContext());
@@ -95,6 +104,7 @@ namespace Schreitica
                     Visible = true
                 };
                 trayIcon.DoubleClick += Show;
+                TrayIcon = trayIcon;
             }
 
             private void Show(object sender, EventArgs e)

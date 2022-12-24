@@ -10,7 +10,7 @@ namespace Schreitica.UI
 {
     public partial class ActionForm : Form
     {
-        public ActionForm()
+        public ActionForm(string title)
         {
             InitializeComponent();
 
@@ -35,7 +35,7 @@ namespace Schreitica.UI
             };
         }
 
-        public ActionForm(object ActionType, object ActionName, object Parameter):this()
+        public ActionForm(object ActionType, object ActionName, object Parameter):this("Edit Action")
         {
             // TODO Edit.
         }
