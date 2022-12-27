@@ -93,15 +93,5 @@ namespace Schreitica
             return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Schreitica",
                 "Settings.xml");
         }
-
-        public static string SettingsString()
-        {
-            string path = SettingsPath();
-
-            if (!File.Exists(path))
-                return null;
-
-            return File.ReadAllText(path);
-        }
     }
 }

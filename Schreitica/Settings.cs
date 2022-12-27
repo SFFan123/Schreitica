@@ -38,7 +38,14 @@ namespace Schreitica
 
         public void Load()
         {
-            var doc = XDocument.Load(new StreamReader(SettingHelper.SettingsPath(), Encoding.Default));
+            string path = SettingHelper.SettingsPath();
+
+            if (!File.Exists(path))
+            {
+                return;
+            }
+
+            var doc = XDocument.Load(new StreamReader(path, Encoding.Default));
 
             XmlSerializer serializer =
                 new XmlSerializer(typeof(Settings));
