@@ -73,7 +73,7 @@ namespace Schreitica.Actions
         public int timeout_s { get; }
         public override async Task<object> ExecuteAsync()
         {
-            await Task.Delay(timeout_s * 100);
+            await Task.Delay(timeout_s * 1000);
             return Task.CompletedTask;
         }
 

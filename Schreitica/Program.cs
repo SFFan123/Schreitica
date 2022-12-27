@@ -49,6 +49,10 @@ namespace Schreitica
                     catch (Exception e)
                     {
                         TrayIcon.ShowBalloonTip(1000, $"Fehler in Aktion: {Actions.IndexOf(action)}", $"Fehler action: {action.LogName}{Environment.NewLine}{(e.InnerException?.Message ?? e.Message)}", ToolTipIcon.Error);
+                        if (!Settings.Instance.ContinueOnActionError)
+                        {
+                            break;
+                        }
                     }
                 }
             };

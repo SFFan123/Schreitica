@@ -78,7 +78,7 @@ namespace Schreitica
     {
         public static void SaveSetting(string settingXML)
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Schreitica");
+            string path = SettingsPath();
 
             if (!Directory.Exists(path))
                 Directory.CreateDirectory(path);
@@ -88,14 +88,20 @@ namespace Schreitica
             File.WriteAllText(path, settingXML, Encoding.UTF8);
         }
 
-        public static FileStream LoadSettings()
+        public static string SettingsPath()
         {
-            string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Schreitica", "Settings.xml");
+            return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "Schreitica",
+                "Settings.xml");
+        }
+
+        public static string SettingsString()
+        {
+            string path = SettingsPath();
 
             if (!File.Exists(path))
                 return null;
 
-            return File.OpenRead(path);
+            return File.ReadAllText(path);
         }
     }
 }

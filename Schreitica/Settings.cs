@@ -1,9 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
-using Schreitica.Actions;
 
 namespace Schreitica
 {
@@ -12,15 +11,18 @@ namespace Schreitica
     {
         private static Settings instance;
 
-        public static Settings Instance => instance ?? (instance = new Settings());
+        [XmlArray] public string[] Actions = Array.Empty<string>();
 
         private Settings()
-        { }
+        {
+        }
+
+        public static Settings Instance => instance ?? (instance = new Settings());
 
         public double DbThreshold { get; set; }
 
         public bool AutoConnectRun { get; set; }
-        
+
         public string OBSUrl { get; set; } = "";
 
         public string OBSPassword { get; set; } = "";
@@ -29,46 +31,40 @@ namespace Schreitica
 
         public string HueUser { get; set; } = "";
 
-        [XmlArray]
-        public string[] Actions = Array.Empty<string>();
-
         public int USBPollingDelay { get; set; }
+
+        public bool ContinueOnActionError { get; set; }
 
 
         public void Load()
         {
+            var doc = XDocument.Load(new StreamReader(SettingHelper.SettingsPath(), Encoding.Default));
+
             XmlSerializer serializer =
                 new XmlSerializer(typeof(Settings));
 
-            var stream = SettingHelper.LoadSettings();
-            if (stream != null)
-            {
-                Settings loadSettings;
-                using (stream)
-                {
-                    loadSettings = (Settings)serializer.Deserialize(stream);
-                }
+            Settings loadSettings;
+            loadSettings = (Settings)serializer.Deserialize(doc.CreateReader());
 
-                this.Actions = loadSettings.Actions;
-                this.AutoConnectRun = loadSettings.AutoConnectRun;
-                this.OBSPassword = loadSettings.OBSPassword;
-                this.DbThreshold = loadSettings.DbThreshold;
-                this.USBPollingDelay = loadSettings.USBPollingDelay;
-                this.OBSUrl = loadSettings.OBSUrl;
-                this.HueURL = loadSettings.HueURL;
-                this.HueUser = loadSettings.HueUser;
-                this.Actions = loadSettings.Actions;
-            }
+            Actions = loadSettings.Actions;
+            AutoConnectRun = loadSettings.AutoConnectRun;
+            OBSPassword = loadSettings.OBSPassword;
+            DbThreshold = loadSettings.DbThreshold;
+            USBPollingDelay = loadSettings.USBPollingDelay;
+            OBSUrl = loadSettings.OBSUrl;
+            HueURL = loadSettings.HueURL;
+            HueUser = loadSettings.HueUser;
+            Actions = loadSettings.Actions;
+            ContinueOnActionError = loadSettings.ContinueOnActionError;
         }
 
         public string ToXML()
         {
-            var xmlserializer = new XmlSerializer(typeof(Settings));
-            var stringWriter = new StringWriter();
-            using (var writer = XmlWriter.Create(stringWriter, new XmlWriterSettings(){Encoding = Encoding.UTF8}))
+            using (var stringwriter = new StringWriter())
             {
-                xmlserializer.Serialize(writer, this);
-                return stringWriter.ToString();
+                var serializer = new XmlSerializer(this.GetType());
+                serializer.Serialize(stringwriter, this);
+                return stringwriter.ToString();
             }
         }
     }

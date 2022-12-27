@@ -89,6 +89,9 @@ namespace Schreitica
 
             txt_Hue_URL.Text = Settings.Instance.HueURL;
             txt_Hue_User.Text = Settings.Instance.HueUser;
+
+            continueOnErrorToolStripMenuItem.Checked = Settings.Instance.ContinueOnActionError;
+
             init_ParsePollingDelay();
             init_LoadActions();
         }
@@ -96,6 +99,7 @@ namespace Schreitica
         private void UsbConnectionStateChanged(object sender, ConnectionChangedEventArgs e)
         {
             this.btn_Start.Enabled = e.Connected;
+            this.btn_Stop.Enabled = e.Connected;
             this.toolstrip_lbl_Connection.Text = e.Connected ? "Connected" : "Disconnected";
         }
 
@@ -160,7 +164,7 @@ namespace Schreitica
             if (string.IsNullOrEmpty(textval) || string.IsNullOrWhiteSpace(textval))
                 return;
 
-            if (Double.TryParse(txt_Treshold.Text, out double newval))
+            if (double.TryParse(txt_Treshold.Text, out double newval))
             {
                 Settings.Instance.DbThreshold = newval;
             }
@@ -266,6 +270,11 @@ namespace Schreitica
         private void Menu_Test_FireNoiseLevelReached_Click(object sender, EventArgs e)
         {
             AppEvents.RaiseThresholdExceeded(sender, e);
+        }
+
+        private void continueOnErrorToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        {
+            Settings.Instance.ContinueOnActionError = continueOnErrorToolStripMenuItem.Checked;
         }
     }
 }
