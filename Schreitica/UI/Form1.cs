@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Net;
@@ -144,10 +145,21 @@ namespace Schreitica
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var res = new HueWizard().ShowDialog(this);
+            var diag = new HueWizard();
+            var res = diag.ShowDialog(this);
             if (res == DialogResult.OK)
             {
-                // TODO
+                txt_Hue_URL.Text = diag.HueAdress;
+                txt_Hue_User.Text = diag.UserName;
+
+                Settings.Instance.HueURL = diag.HueAdress;
+                Settings.Instance.HueUser = diag.UserName;
+
+                if (MessageBox.Show("Save Settings now?", "Save?", MessageBoxButtons.YesNo, MessageBoxIcon.Question) ==
+                    DialogResult.Yes)
+                {
+                    SettingHelper.SaveSetting(Settings.Instance.ToXML());
+                }
             }
         }
 

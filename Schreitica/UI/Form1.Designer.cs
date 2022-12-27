@@ -76,7 +76,7 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txt_Hue_URL = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btn_Hue_Wizard = new System.Windows.Forms.Button();
             this.numUpDown_PollingRate = new System.Windows.Forms.NumericUpDown();
             this.continueOnErrorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
@@ -454,7 +454,7 @@
             this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Controls.Add(this.label6);
             this.tabPage2.Controls.Add(this.txt_Hue_URL);
-            this.tabPage2.Controls.Add(this.button1);
+            this.tabPage2.Controls.Add(this.btn_Hue_Wizard);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -515,15 +515,15 @@
             this.txt_Hue_URL.Size = new System.Drawing.Size(194, 20);
             this.txt_Hue_URL.TabIndex = 1;
             // 
-            // button1
+            // btn_Hue_Wizard
             // 
-            this.button1.Location = new System.Drawing.Point(9, 115);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Hue Wizard";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btn_Hue_Wizard.Location = new System.Drawing.Point(9, 115);
+            this.btn_Hue_Wizard.Name = "btn_Hue_Wizard";
+            this.btn_Hue_Wizard.Size = new System.Drawing.Size(75, 23);
+            this.btn_Hue_Wizard.TabIndex = 0;
+            this.btn_Hue_Wizard.Text = "Hue Wizard";
+            this.btn_Hue_Wizard.UseVisualStyleBackColor = true;
+            this.btn_Hue_Wizard.Click += new System.EventHandler(this.button1_Click);
             // 
             // numUpDown_PollingRate
             // 
@@ -649,7 +649,7 @@
         private System.Windows.Forms.TreeView treeViewActions;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button btn_removeAction;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btn_Hue_Wizard;
         private System.Windows.Forms.Button btn_applyActions;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem Menu_Test_FireNoiseLevelReached;
