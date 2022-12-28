@@ -15,7 +15,7 @@ namespace Schreitica.Actions.OBS
         public string SceneName { get; private set; }
         public string SourceName { get; private set; }
 
-        public Task<object> ExecuteAsync()
+        public async Task<object> ExecuteAsync()
         {
             var obs = GetObsConnection();
 
@@ -31,7 +31,7 @@ namespace Schreitica.Actions.OBS
             }
             obs.SetSceneItemEnabled(SceneName, id , true );
 
-            return null;
+            return Task.CompletedTask;
         }
 
         public string ToXMLAction()

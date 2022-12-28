@@ -12,10 +12,10 @@ namespace Schreitica.Actions.OBS
 
         public string SceneName { get; private set; }
         
-        public Task<object> ExecuteAsync()
+        public async Task<object> ExecuteAsync()
         {
             GetObsConnection().SetCurrentProgramScene(SceneName);
-            return null;
+            return Task.CompletedTask;;
         }
 
         public string ToXMLAction()

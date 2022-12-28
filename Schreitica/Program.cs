@@ -56,6 +56,19 @@ namespace Schreitica
                     }
                 }
             };
+
+            if (settings.AutoConnectRun)
+            {
+                try
+                {
+                    USBHandler.StartReading();
+                }
+                catch (Exception e)
+                {
+                    TrayIcon.ShowBalloonTip(1000, "Fehler beim Autostart" ,$"{(e.InnerException?.Message ?? e.Message)}", ToolTipIcon.Error);
+                }
+            }
+
             Application.Run(new MyCustomApplicationContext());
         }
 

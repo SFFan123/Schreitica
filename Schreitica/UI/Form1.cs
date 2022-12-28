@@ -91,6 +91,10 @@ namespace Schreitica
             txt_Hue_URL.Text = Settings.Instance.HueURL;
             txt_Hue_User.Text = Settings.Instance.HueUser;
 
+            txt_Treshold.Text = Settings.Instance.DbThreshold.ToString("F1");
+
+            autoConnectRunToolStripMenuItem.Checked = Settings.Instance.AutoConnectRun;
+
             continueOnErrorToolStripMenuItem.Checked = Settings.Instance.ContinueOnActionError;
 
             init_ParsePollingDelay();
@@ -106,7 +110,22 @@ namespace Schreitica
 
         private void OBSConnectionStateChanged(object sender, ConnectionChangedEventArgs e)
         {
-            this.toolStripStatusLabel_OBS_Status.Text = e.Connected ? "Connected" : "Disconnected";
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(delegate
+                {
+                    updateOBSStatus(e.Connected);
+                }));
+            }
+            else
+            {
+                updateOBSStatus(e.Connected);
+            }
+        }
+
+        private void updateOBSStatus(bool connected)
+        {
+            toolStripStatusLabel_OBS_Status.Text = connected ? "Connected" : "Disconnected";
         }
 
         private void saveSettingToolStripMenuItem_Click(object sender, EventArgs e)
@@ -135,12 +154,32 @@ namespace Schreitica
 
         private void btn_Start_Click(object sender, EventArgs e)
         {
-            Program.USBHandler.StartReading();
+            try
+            {
+                Program.USBHandler.StartReading();
+            }
+            catch (ApplicationException exception)
+            {
+                MessageBox.Show("Device not detected", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            btn_Start.Enabled = false;
+            btn_Stop.Enabled = true;
         }
 
         private void btn_Stop_Click(object sender, EventArgs e)
         {
-            Program.USBHandler.StopReading();
+            try
+            {
+                Program.USBHandler.StopReading();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            btn_Start.Enabled = true;
+            btn_Stop.Enabled = false;
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -59,6 +59,8 @@ namespace Schreitica
         {
             if (!IsConnected) throw new ApplicationException();
             running = false;
+
+            PollingTask?.Wait();
             PollingTask?.Dispose();
 
             running = true;
@@ -69,6 +71,7 @@ namespace Schreitica
         public void StopReading()
         {
             running = false;
+            PollingTask.Wait();
             PollingTask?.Dispose();
             ReadingTask?.Dispose();
         }
